@@ -13,6 +13,25 @@ public class BankAccount {
     }
 
     public void deposit (double amount){
+
+        try{
+            System.out.println("Deposit - talking to teller");
+            Thread.sleep(7000);
+        }
+        catch(InterruptedException e){
+            throw new RuntimeException(e);
+        }
+
+        synchronized (this){
+            double origBalance = balance;
+            balance += amount;
+            System.out.printf("STARTING BALANCE: %.0f, DEPOSIT (%.0f)" + " : NEW BALANCE = %.0f%n", origBalance, amount, balance);
+        }
+
+    }
+
+
+    public synchronized void withdraw (double amount){
         try{
             Thread.sleep(100);
         }
@@ -21,7 +40,15 @@ public class BankAccount {
         }
 
         double origBalance = balance;
-        balance += amount;
-        System.out.printf("STARTING BALANCE: %.0f, DEPOSIT (%.0f)" + " : NEW BALANCE = %.0f%n", origBalance, amount, balance);
+
+        if(amount <= balance){
+            balance -= amount;
+            System.out.printf("STARTING BALANCE: %.0f, WITHDRAWAL (%.0f)" + " : NEW BALANCE = %.0f%n", origBalance, amount, balance);
+        }
+        else{
+            System.out.printf("STARTING BALANCE: %.0f, WITHDRAWAL (%.Of)" + ": INSUFFICIENT FUNDS!", origBalance, amount);
+        }
+
     }
+
 }
