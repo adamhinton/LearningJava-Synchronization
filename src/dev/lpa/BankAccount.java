@@ -3,9 +3,21 @@ package dev.lpa;
 public class BankAccount {
 
     private double balance;
+    private String name;
 
-    public BankAccount(double balance) {
+    public BankAccount(String name, double balance) {
         this.balance = balance;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    // Don't want wo threads to set name at a time
+    public synchronized void setName(String name) {
+        this.name = name;
+        System.out.println("Updated name = " + name);
     }
 
     public double getBalance() {
